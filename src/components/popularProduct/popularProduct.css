@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+.handwrite-font {
+  font-family: "Edu NSW ACT Cursive", cursive;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}
+
+@keyframes mobileScroll {
+  0% { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(-50%,0,0); }
+}
+
+.mobile-carousel {
+  animation: mobileScroll 20s linear infinite;
+  will-change: transform;
+}
+
+.bg-grid-lines {
+  background-color: #DD6A99; /* base pink */
+  background-image: 
+    repeating-linear-gradient(
+      0deg,            /* horizontal lines */
+      rgba(255,255,255,0.2) 0px,
+      rgba(255,255,255,0.2) 1px,
+      transparent 1px,
+      transparent 20px
+    ),
+    repeating-linear-gradient(
+      90deg,           /* vertical lines */
+      rgba(255,255,255,0.2) 0px,
+      rgba(255,255,255,0.2) 1px,
+      transparent 1px,
+      transparent 20px
+    );
+  background-size: auto;
+}
+
+
