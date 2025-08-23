@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import img1 from "../../assets/img1.JPG";
 import img4 from "../../assets/img4.JPG";
-import img5 from "../../assets/img5.JPG";
+import img5 from "../../assets/img0.1.jpg";
 import { MoveRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
