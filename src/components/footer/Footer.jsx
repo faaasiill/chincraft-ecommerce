@@ -104,7 +104,7 @@ const Footer = ({ scrollToContact }) => {
               </li>
               <li>
                 <a
-                  href="mailto:contact@chincraft.com"
+                  href="mailto:chincraft.hm@gmail.com"
                   className="text-gray-600 hover:text-pink-500 transition-colors flex items-center gap-2"
                 >
                   <Mail size={16} /> chincraft.hm@gmail.com
@@ -112,7 +112,7 @@ const Footer = ({ scrollToContact }) => {
               </li>
               <li>
                 <a
-                  href="tel:+911234567890"
+                  href="tel:+91 88487 45252"
                   className="text-gray-600 hover:text-pink-500 transition-colors flex items-center gap-2"
                 >
                   <Phone size={16} /> +91 88487 45252
@@ -130,7 +130,7 @@ const Footer = ({ scrollToContact }) => {
         </div>
       </div>
      <div className="flex justify-center text-center">
-       <p className="absolute text-xs mb-3 tracking-tight font-thin text-gray-500  bottom-0">© 2025 ChinCraft. All rights reserved.</p>
+       <p className="absolute text-xs mb-3 tracking-tight font-thin text-white  bottom-0">© 2025 ChinCraft. All rights reserved.</p>
      </div>
     </footer>
 
