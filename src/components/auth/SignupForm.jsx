@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import ArrowFollow from "../reactbites/arrowFollow";
+import ArrowFollow from "../reactbites/ArrowFollow";
 
 const SignupForm = () => {
   const { googleLogin, emailSignup } = useAuth();
