@@ -35,7 +35,7 @@ ${message}
 Best regards,
 ${name}`;
 
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=your-business@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=chincraft.hm@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
 
     window.open(gmailUrl, '_blank');
     setIsEmailModalOpen(false);
@@ -46,7 +46,7 @@ ${name}`;
     const message = whatsappMessageRef.current?.value || '';
 
     const whatsappMessage = `Hello! I'm ${name}.\n\n${message}`;
-    const whatsappLink = `https://wa.me/1234567890?text=${encodeURIComponent(whatsappMessage)}`;
+    const whatsappLink = `https://wa.me/918848745252?text=${encodeURIComponent(whatsappMessage)}`;
 
     window.open(whatsappLink, '_blank');
     setIsWhatsAppModalOpen(false);

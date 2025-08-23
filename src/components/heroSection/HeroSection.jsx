@@ -3,9 +3,16 @@ import img1 from "../../assets/img1.JPG";
 import img4 from "../../assets/img4.JPG";
 import img5 from "../../assets/img5.JPG";
 import { MoveRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 const HeroSection = () => {
   const [animate, setAnimate] = useState(false);
+  const navigate = useNavigate();
+
+  const shopNowbtn = () => {
+    navigate('/products')
+  }
 
   useEffect(() => {
     setAnimate(true);
@@ -115,7 +122,7 @@ const HeroSection = () => {
 
         {/* Bottom Section */}
         <div className="flex flex-col lg:flex-row justify-center items-center relative">
-          <button className="bg-[#DD6A99] w-[220px] h-[60px] rounded-full text-white hover:bg-[#d94a83] font-medium flex items-center justify-center gap-2">
+          <button className="bg-[#DD6A99] w-[220px] h-[60px] rounded-full text-white hover:bg-[#d94a83] font-medium flex items-center justify-center gap-2" onClick={shopNowbtn}>
             <span className="handwrite-font text-2xl tracking-tighter">
               Shop Now
             </span>

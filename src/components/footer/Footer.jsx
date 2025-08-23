@@ -94,7 +94,7 @@ const Footer = ({ scrollToContact }) => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="https://instagram.com/yourhandle"
+                  href="https://www.instagram.com/madebychiin/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-pink-500 transition-colors flex items-center gap-2"
@@ -107,7 +107,7 @@ const Footer = ({ scrollToContact }) => {
                   href="mailto:contact@chincraft.com"
                   className="text-gray-600 hover:text-pink-500 transition-colors flex items-center gap-2"
                 >
-                  <Mail size={16} /> contact@chincraft.com
+                  <Mail size={16} /> chincraft.hm@gmail.com
                 </a>
               </li>
               <li>
@@ -115,7 +115,7 @@ const Footer = ({ scrollToContact }) => {
                   href="tel:+911234567890"
                   className="text-gray-600 hover:text-pink-500 transition-colors flex items-center gap-2"
                 >
-                  <Phone size={16} /> +91 123 456 7890
+                  <Phone size={16} /> +91 88487 45252
                 </a>
               </li>
             </ul>

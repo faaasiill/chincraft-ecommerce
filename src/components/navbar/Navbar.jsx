@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react";
 import logo from "../../assets/logo.svg";
-import {
-  Search,
-  Home,
-  Package,
-  MessageCircle,
-} from "lucide-react";
+import { Home, Package, MessageCircle, LogIn, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext"
 
-const Navbar = () => {
+const Navbar = ({ scrollToContact }) => {
+  const { isAuthenticated, logout } = useAuth(); // Get authentication status and logout function
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showBackground, setShowBackground] = useState(false);
@@ -18,8 +14,15 @@ const Navbar = () => {
   // Centralized menu configuration
   const navigationItems = [
     { href: "/", text: "Home", icon: Home, component: Link },
-    { href: "", text: "Products", icon: Package, component: "a" },
+    { href: "/products", text: "Products", icon: Package, component: Link },
     { href: "#contact", text: "Contact", icon: MessageCircle, component: "a" },
+    {
+      href: isAuthenticated ? "#" : "/login",
+      text: isAuthenticated ? "Logout" : "Login",
+      icon: isAuthenticated ? LogOut : LogIn,
+      component: isAuthenticated ? "a" : Link,
+      onClick: isAuthenticated ? logout : null, // Call logout if authenticated
+    },
   ];
 
   // Handle scroll for navbar visibility and background
@@ -30,12 +33,11 @@ const Navbar = () => {
       if (currentScrollY < lastScrollY) {
         // Scrolling up
         setIsVisible(true);
-        setShowBackground(currentScrollY > 50); // Show background when scrolled up and past 50px
+        setShowBackground(currentScrollY > 50);
       } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
         // Scrolling down and past 100px
         setIsVisible(false);
-        setIsMenuOpen(false); // Close menu when hiding navbar
-        setIsSearchOpen(false); // Close search when hiding navbar
+        setIsMenuOpen(false);
         setShowBackground(false);
       } else if (currentScrollY <= 50) {
         // At the top of the page
@@ -53,17 +55,13 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
-
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 border-b border-[#DD6A99] transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-150 border-b border-[#DD6A99] transition-all duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       } ${showBackground ? "bg-[#fcf5ea]" : "bg-transparent"}`}
     >
@@ -106,30 +104,8 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Right: Search and Mobile Hamburger */}
+          {/* Right: Mobile Hamburger */}
           <div className="flex items-center">
-            {/* Desktop Search */}
-            <div className="hidden md:flex">
-              <div className="relative">
-                <div className="flex items-center">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className={`absolute right-0 placeholder-[#deafc2] h-10 px-4 pr-10 text-sm border border-[#d9256e] rounded-full focus:outline-none focus:ring-2 focus:ring-[#d9256e] focus:border-transparent transition-all duration-300 ${
-                      isSearchOpen ? "w-64 opacity-100" : "w-0 opacity-0"
-                    }`}
-                  />
-                  <button
-                    onClick={toggleSearch}
-                    className="relative z-10 p-2 text-[#d9256e] hover:text-[#d9256e] rounded-full transition-all duration-200"
-                  >
-                    <Search className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Hamburger */}
             <div className="md:hidden">
               <button
                 onClick={toggleMenu}
@@ -187,7 +163,18 @@ const Navbar = () => {
             {navigationItems.map((item, index) => {
               const Component = item.component;
               const delay = `${200 + (index + 1) * 100}ms`;
-              
+
+              const handleClick = (e) => {
+                if (item.text === "Contact") {
+                  e.preventDefault();
+                  scrollToContact();
+                } else if (item.text === "Logout") {
+                  e.preventDefault();
+                  item.onClick(); // Call logout
+                }
+                closeMenu();
+              };
+
               return (
                 <Component
                   key={item.text}
@@ -199,7 +186,7 @@ const Navbar = () => {
                       : "-translate-x-8 opacity-0"
                   }`}
                   style={{ transitionDelay: isMenuOpen ? delay : "0ms" }}
-                  onClick={closeMenu}
+                  onClick={handleClick}
                 >
                   {item.text}
                 </Component>
@@ -219,30 +206,22 @@ const Navbar = () => {
               isMenuOpen ? "translate-y-0 scale-100" : "-translate-y-4 scale-95"
             }`}
           >
-            {/* Mobile Search */}
-            <div
-              className={`mb-3 transform transition-all duration-700 ease-out ${
-                isMenuOpen
-                  ? "translate-x-0 opacity-100"
-                  : "-translate-x-4 opacity-0"
-              }`}
-              style={{ transitionDelay: isMenuOpen ? "100ms" : "0ms" }}
-            >
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full h-10 px-4 pr-10 text-sm placeholder-[#DD6A99] border border-[#DD6A99] rounded-full focus:outline-none focus:ring-2 focus:ring-[#DD6A99] focus:border-transparent shadow-sm"
-                />
-                <Search className="absolute text-[#DD6A99] right-3 top-3 w-4 h-4" />
-              </div>
-            </div>
-
             {/* Mobile Navigation Links */}
             {navigationItems.map((item, index) => {
               const Component = item.component;
               const delay = `${200 + (index + 1) * 100}ms`;
-              
+
+              const handleClick = (e) => {
+                if (item.text === "Contact") {
+                  e.preventDefault();
+                  scrollToContact();
+                } else if (item.text === "Logout") {
+                  e.preventDefault();
+                  item.onClick(); // Call logout
+                }
+                closeMenu();
+              };
+
               return (
                 <Component
                   key={item.text}
@@ -254,7 +233,7 @@ const Navbar = () => {
                       : "-translate-x-4 opacity-0"
                   }`}
                   style={{ transitionDelay: isMenuOpen ? delay : "0ms" }}
-                  onClick={closeMenu}
+                  onClick={handleClick}
                 >
                   <item.icon className="w-5 h-5 mr-3 transition-transform duration-300 group-hover:rotate-12" />
                   {item.text}
