@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { resetPassword } from "../../api/firebase/auth";
 import { useNavigate } from "react-router-dom";
-import ArrowFollow from "../reactbites/arrowFollow";
+import ArrowFollow from "../reactbites/ArrowFollow";
 import { ArrowBigDown } from "lucide-react";
 
 const LoginForm = () => {
