@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
-import { productService, categoryService } from '../../api/firebase/firebaseService';
-import { cloudinaryService } from '../../utils/cloudinaryService';
+import { useState, useEffect } from "react";
+import {
+  productService,
+  categoryService,
+} from "../../api/firebase/firebaseService";
+import { cloudinaryService } from "../../utils/cloudinaryService";
 import {
   Package,
   Plus,
@@ -13,8 +16,8 @@ import {
   CheckCircle,
   XCircle,
   DollarSign,
-  Loader2
-} from 'lucide-react';
+  Loader2,
+} from "lucide-react";
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -28,13 +31,13 @@ const ProductManagement = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    category: '',
+    name: "",
+    description: "",
+    price: "",
+    category: "",
     images: [],
-    stock: '',
-    features: []
+    stock: "",
+    features: [],
   });
 
   const [imageFiles, setImageFiles] = useState([]);
@@ -48,18 +51,21 @@ const ProductManagement = () => {
   const fetchProducts = async (loadMore = false) => {
     try {
       setLoading(!loadMore);
-      const result = await productService.getProducts(10, loadMore ? lastDoc : null);
-      
+      const result = await productService.getProducts(
+        10,
+        loadMore ? lastDoc : null
+      );
+
       if (loadMore) {
-        setProducts(prev => [...prev, ...result.products]);
+        setProducts((prev) => [...prev, ...result.products]);
       } else {
         setProducts(result.products);
       }
-      
+
       setLastDoc(result.lastDoc);
       setHasMore(result.products.length === 10);
     } catch (err) {
-      setError('Failed to fetch products: ' + err.message);
+      setError("Failed to fetch products: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -70,49 +76,51 @@ const ProductManagement = () => {
       const result = await categoryService.getCategories(50);
       setCategories(result.categories);
     } catch (err) {
-      setError('Failed to fetch categories: ' + err.message);
+      setError("Failed to fetch categories: " + err.message);
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + formData.images.length > 5) {
-      setError('Maximum 5 images allowed');
+      setError("Maximum 5 images allowed");
       return;
     }
     setImageFiles(files);
   };
 
   const uploadImages = async (files) => {
-    const uploadPromises = files.map(file => 
-      cloudinaryService.uploadImage(file, 'products')
+    const uploadPromises = files.map((file) =>
+      cloudinaryService.uploadImage(file, "products")
     );
     return await Promise.all(uploadPromises);
   };
 
   const handleAddFeature = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      features: [...prev.features, '']
+      features: [...prev.features, ""],
     }));
   };
 
   const handleFeatureChange = (index, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      features: prev.features.map((feature, i) => i === index ? value : feature)
+      features: prev.features.map((feature, i) =>
+        i === index ? value : feature
+      ),
     }));
   };
 
   const removeFeature = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      features: prev.features.filter((_, i) => i !== index)
+      features: prev.features.filter((_, i) => i !== index),
     }));
   };
 
@@ -134,21 +142,21 @@ const ProductManagement = () => {
         price: parseFloat(formData.price),
         stock: parseInt(formData.stock),
         images: imageUrls,
-        features: formData.features.filter(feature => feature.trim() !== '')
+        features: formData.features.filter((feature) => feature.trim() !== ""),
       };
 
       if (editingProduct) {
         await productService.updateProduct(editingProduct.id, productData);
-        setSuccess('Product updated successfully!');
+        setSuccess("Product updated successfully!");
       } else {
         await productService.addProduct(productData);
-        setSuccess('Product added successfully!');
+        setSuccess("Product added successfully!");
       }
 
       resetForm();
       fetchProducts();
     } catch (err) {
-      setError('Failed to save product: ' + err.message);
+      setError("Failed to save product: " + err.message);
     } finally {
       setImageUploading(false);
     }
@@ -156,13 +164,13 @@ const ProductManagement = () => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      description: '',
-      price: '',
-      category: '',
+      name: "",
+      description: "",
+      price: "",
+      category: "",
       images: [],
-      stock: '',
-      features: []
+      stock: "",
+      features: [],
     });
     setImageFiles([]);
     setShowAddForm(false);
@@ -171,44 +179,47 @@ const ProductManagement = () => {
 
   const handleEdit = (product) => {
     setFormData({
-      name: product.name || '',
-      description: product.description || '',
-      price: product.price?.toString() || '',
-      category: product.category || '',
+      name: product.name || "",
+      description: product.description || "",
+      price: product.price?.toString() || "",
+      category: product.category || "",
       images: product.images || [],
-      stock: product.stock?.toString() || '',
-      features: product.features || []
+      stock: product.stock?.toString() || "",
+      features: product.features || [],
     });
     setEditingProduct(product);
     setShowAddForm(true);
   };
 
   const handleDelete = async (productId) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    if (!window.confirm("Are you sure you want to delete this product?"))
+      return;
 
     try {
       await productService.deleteProduct(productId);
-      setSuccess('Product deleted successfully!');
+      setSuccess("Product deleted successfully!");
       fetchProducts();
     } catch (err) {
-      setError('Failed to delete product: ' + err.message);
+      setError("Failed to delete product: " + err.message);
     }
   };
 
   const toggleListing = async (productId, currentStatus) => {
     try {
       await productService.toggleProductListing(productId, currentStatus);
-      setSuccess(`Product ${currentStatus ? 'unlisted' : 'listed'} successfully!`);
+      setSuccess(
+        `Product ${currentStatus ? "unlisted" : "listed"} successfully!`
+      );
       fetchProducts();
     } catch (err) {
-      setError('Failed to toggle product listing: ' + err.message);
+      setError("Failed to toggle product listing: " + err.message);
     }
   };
 
   const removeImage = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index)
+      images: prev.images.filter((_, i) => i !== index),
     }));
   };
 
@@ -244,18 +255,20 @@ const ProductManagement = () => {
               <Package className="w-8 h-8 mr-3 text-indigo-600" />
               Product Management
             </h2>
-            <p className="text-slate-600 mt-2">Manage your store's product catalog</p>
+            <p className="text-slate-600 mt-2">
+              Manage your store's product catalog
+            </p>
           </div>
           <button
             onClick={() => setShowAddForm(!showAddForm)}
             className={`flex items-center px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-              showAddForm 
-                ? 'bg-slate-200 hover:bg-slate-300 text-slate-700' 
-                : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl'
+              showAddForm
+                ? "bg-slate-200 hover:bg-slate-300 text-slate-700"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl"
             }`}
           >
             <Plus className="w-5 h-5 mr-2" />
-            {showAddForm ? 'Cancel' : 'Add Product'}
+            {showAddForm ? "Cancel" : "Add Product"}
           </button>
         </div>
 
@@ -283,9 +296,9 @@ const ProductManagement = () => {
               ) : (
                 <Plus className="w-6 h-6 mr-2 text-indigo-600" />
               )}
-              {editingProduct ? 'Edit Product' : 'Add New Product'}
+              {editingProduct ? "Edit Product" : "Add New Product"}
             </h3>
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -395,18 +408,25 @@ const ProductManagement = () => {
                         className="hidden"
                       />
                     </label>
-                    <p className="text-xs text-slate-500 mt-2">PNG, JPG up to 10MB each</p>
+                    <p className="text-xs text-slate-500 mt-2">
+                      PNG, JPG up to 10MB each
+                    </p>
                   </div>
                 </div>
-                
+
                 {formData.images.length > 0 && (
                   <div className="mt-4">
-                    <p className="text-sm font-medium text-slate-700 mb-3">Current Images:</p>
+                    <p className="text-sm font-medium text-slate-700 mb-3">
+                      Current Images:
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {formData.images.map((image, index) => (
                         <div key={index} className="relative group">
                           <img
-                            src={cloudinaryService.getOptimizedUrl(image.url, { width: 200, height: 200 })}
+                            src={cloudinaryService.getOptimizedUrl(image.url, {
+                              width: 200,
+                              height: 200,
+                            })}
                             alt={`Product ${index + 1}`}
                             className="w-full h-32 object-cover rounded-xl border border-slate-200"
                           />
@@ -434,7 +454,9 @@ const ProductManagement = () => {
                       <input
                         type="text"
                         value={feature}
-                        onChange={(e) => handleFeatureChange(index, e.target.value)}
+                        onChange={(e) =>
+                          handleFeatureChange(index, e.target.value)
+                        }
                         className="flex-1 border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
                         placeholder="Enter feature"
                       />
@@ -469,8 +491,10 @@ const ProductManagement = () => {
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       Uploading...
                     </>
+                  ) : editingProduct ? (
+                    "Update Product"
                   ) : (
-                    editingProduct ? 'Update Product' : 'Add Product'
+                    "Add Product"
                   )}
                 </button>
                 <button
@@ -492,8 +516,12 @@ const ProductManagement = () => {
               <div className="bg-slate-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
                 <Package className="w-10 h-10 text-slate-400" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-600 mb-2">No products found</h3>
-              <p className="text-slate-500">Click "Add Product" to create your first product</p>
+              <h3 className="text-lg font-semibold text-slate-600 mb-2">
+                No products found
+              </h3>
+              <p className="text-slate-500">
+                Click "Add Product" to create your first product
+              </p>
             </div>
           ) : (
             <>
@@ -526,11 +554,17 @@ const ProductManagement = () => {
                   </thead>
                   <tbody className="divide-y divide-slate-200">
                     {products.map((product) => (
-                      <tr key={product.id} className="hover:bg-slate-50 transition-colors duration-200">
+                      <tr
+                        key={product.id}
+                        className="hover:bg-slate-50 transition-colors duration-200"
+                      >
                         <td className="px-8 py-4">
                           {product.images && product.images.length > 0 ? (
                             <img
-                              src={cloudinaryService.getOptimizedUrl(product.images[0].url, { width: 60, height: 60 })}
+                              src={cloudinaryService.getOptimizedUrl(
+                                product.images[0].url,
+                                { width: 60, height: 60 }
+                              )}
                               alt={product.name}
                               className="w-12 h-12 object-cover rounded border border-slate-200"
                             />
@@ -541,23 +575,32 @@ const ProductManagement = () => {
                           )}
                         </td>
                         <td className="px-8 py-4">
-                          <div className="font-medium text-slate-900">{product.name}</div>
-                          <div className="text-sm text-slate-500">{product.description?.substring(0, 50)}...</div>
+                          <div className="font-medium text-slate-900">
+                            {product.name}
+                          </div>
+                          <div className="text-sm text-slate-500">
+                            {product.description?.substring(0, 50)}...
+                          </div>
                         </td>
                         <td className="px-8 py-4 text-sm text-slate-700">
-                          {categories.find(cat => cat.id === product.category)?.name || 'Unknown'}
+                          {categories.find((cat) => cat.id === product.category)
+                            ?.name || "Unknown"}
                         </td>
-                        <td className="px-8 py-4 text-sm text-slate-700">${product.price.toFixed(2)}</td>
-                        <td className="px-8 py-4 text-sm text-slate-700">{product.stock}</td>
+                        <td className="px-8 py-4 text-sm text-slate-700">
+                          ${product.price.toFixed(2)}
+                        </td>
+                        <td className="px-8 py-4 text-sm text-slate-700">
+                          {product.stock}
+                        </td>
                         <td className="px-8 py-4">
                           <span
                             className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${
                               product.listed
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-red-100 text-red-800'
+                                ? "bg-emerald-100 text-emerald-800"
+                                : "bg-red-100 text-red-800"
                             }`}
                           >
-                            {product.listed ? 'Listed' : 'Unlisted'}
+                            {product.listed ? "Listed" : "Unlisted"}
                           </span>
                         </td>
                         <td className="px-8 py-4 text-sm space-x-4">
@@ -569,15 +612,21 @@ const ProductManagement = () => {
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => toggleListing(product.id, product.listed)}
+                            onClick={() =>
+                              toggleListing(product.id, product.listed)
+                            }
                             className={`${
                               product.listed
-                                ? 'text-red-600 hover:text-red-800'
-                                : 'text-emerald-600 hover:text-emerald-800'
+                                ? "text-red-600 hover:text-red-800"
+                                : "text-emerald-600 hover:text-emerald-800"
                             } transition-colors duration-200`}
-                            title={product.listed ? 'Unlist' : 'List'}
+                            title={product.listed ? "Unlist" : "List"}
                           >
-                            {product.listed ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            {product.listed ? (
+                              <EyeOff className="w-4 h-4" />
+                            ) : (
+                              <Eye className="w-4 h-4" />
+                            )}
                           </button>
                           <button
                             onClick={() => handleDelete(product.id)}
@@ -606,7 +655,7 @@ const ProductManagement = () => {
                         Loading...
                       </>
                     ) : (
-                      'Load More'
+                      "Load More"
                     )}
                   </button>
                 </div>

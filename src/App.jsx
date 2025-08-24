@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -15,7 +20,10 @@ const PrivateRoute = ({ children }) => {
   if (loading || initializing) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+        <div className="text-center">
+          <div className="w-8 h-8 border border-gray-200 border-t-gray-800 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 text-sm font-light">Loading...</p>
+        </div>
       </div>
     );
   }

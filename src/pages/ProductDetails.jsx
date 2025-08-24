@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { categoryService, productService } from "../api/firebase/firebaseService";
+import {
+  categoryService,
+  productService,
+} from "../api/firebase/firebaseService";
 import { useParams, Link } from "react-router-dom";
-import { X, Home, User, Phone, MapPin } from 'lucide-react';
-import ProductImageGallery from '../components/productDetails/ProductImageGallery';
-import ProductInfo from '../components/productDetails/ProductInfo';
-import RecommendedProducts from '../components/productDetails/RecommendedProducts';
-import Footer from '../components/footer/Footer';
+import { X, Home, User, Phone, MapPin } from "lucide-react";
+import ProductImageGallery from "../components/productDetails/ProductImageGallery";
+import ProductInfo from "../components/productDetails/ProductInfo";
+import RecommendedProducts from "../components/productDetails/RecommendedProducts";
+import Footer from "../components/footer/Footer";
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -35,68 +38,79 @@ const ProductDetails = () => {
         setError(null);
 
         if (!productId) {
-          console.error("No productId provided in URL");
           setError("Invalid product ID");
           setLoading(false);
           return;
         }
 
-        const productData = await productService.getProducts();
+        // Fetch all products with a larger limit to ensure we get the product
+        const productData = await productService.getProducts(1000); // Increased limit
 
-        if (!productData || !productData.products || !Array.isArray(productData.products)) {
-          console.error("Invalid product data structure:", productData);
+        if (
+          !productData ||
+          !productData.products ||
+          !Array.isArray(productData.products)
+        ) {
           setError("Failed to load product data");
           setLoading(false);
           return;
         }
 
-        const currentProduct = productData.products.find((p) => p.id === productId);
+        const currentProduct = productData.products.find(
+          (p) => p.id === productId
+        );
+
         if (!currentProduct) {
-          console.error(`Product with ID ${productId} not found in data:`, productData.products);
           setError("Product not found");
           setLoading(false);
           return;
         }
-
         setProduct(currentProduct);
 
-        if (currentProduct?.category) {
-          const categoryData = await categoryService.getCategories();
-          console.log("Category data:", categoryData);
+        // Fetch categories
+        try {
+          const categoryData = await categoryService.getCategories(100); // Increased limit
 
-          if (!categoryData || !categoryData.categories || !Array.isArray(categoryData.categories)) {
-            console.error("Invalid category data structure:", categoryData);
-          } else {
+          if (
+            categoryData &&
+            categoryData.categories &&
+            Array.isArray(categoryData.categories)
+          ) {
             const productCategory = categoryData.categories.find(
               (c) => c.id === currentProduct.category
             );
             setCategory(productCategory);
-          }
 
-          const allProducts = await productService.getProducts(20);
-          console.log("All products:", allProducts);
-
-          if (allProducts?.products) {
-            const sameCategoryProducts = allProducts.products
+            // Fetch recommended products from the same category
+            const sameCategoryProducts = productData.products
               .filter(
                 (p) =>
                   p.category === currentProduct.category &&
                   p.id !== currentProduct.id &&
-                  p.listed
+                  p.listed === true
               )
-              .slice(0, 4); 
+              .slice(0, 4);
+
             setRecommendedProducts(sameCategoryProducts);
           }
+        } catch (categoryError) {
+          console.error("category error", categoryError);
         }
       } catch (error) {
-        console.error("Error fetching product data:", error);
-        setError("An error occurred while loading the product");
+        setError(
+          `An error occurred while loading the product: ${error.message}`
+        );
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProductData();
+    if (productId) {
+      fetchProductData();
+    } else {
+      setError("No product ID provided");
+      setLoading(false);
+    }
   }, [productId]);
 
   const handleBuyNow = () => {
@@ -174,7 +188,9 @@ const ProductDetails = () => {
 • City: ${sanitize(addressData.city)}
 • State: ${sanitize(addressData.state)}
 • Pincode: ${sanitize(addressData.pincode)}${
-      addressData.landmark ? `\n• Landmark: ${sanitize(addressData.landmark)}` : ""
+      addressData.landmark
+        ? `\n• Landmark: ${sanitize(addressData.landmark)}`
+        : ""
     }
 
 Please confirm the order and let me know the pricing and delivery timeline. Thank you!`;
@@ -206,8 +222,8 @@ Please confirm the order and let me know the pricing and delivery timeline. Than
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-500">Loading...</p>
+          <div className="w-8 h-8 border border-gray-200 border-t-gray-800 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 text-sm font-light">Loading...</p>
         </div>
       </div>
     );
@@ -217,7 +233,9 @@ Please confirm the order and let me know the pricing and delivery timeline. Than
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 text-lg">{error || "Product not found"}</p>
+          <p className="text-gray-500 text-lg">
+            {error || "Product not found"}
+          </p>
           <Link
             to="/products"
             className="mt-4 inline-block text-sm text-black underline hover:text-gray-700"
@@ -242,12 +260,12 @@ Please confirm the order and let me know the pricing and delivery timeline. Than
 
       <div className="px-4 md:px-8 lg:px-16 pb-16">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
-          <ProductImageGallery 
+          <ProductImageGallery
             product={product}
             selectedImageIndex={selectedImageIndex}
             setSelectedImageIndex={setSelectedImageIndex}
           />
-          
+
           <ProductInfo
             product={product}
             category={category}
