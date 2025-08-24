@@ -44,7 +44,7 @@ export const signUpWithEmail = async (email, password) => {
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     const user = result.user;
-    // Create user doc in Firestore, set role only if not already set (though for new signup, it shouldn't exist)
+    // Create user doc in Firestore, set role only if not already set 
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
     const updates = {};

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import logo from "../../assets/logo.svg";
 import { Home, Package, MessageCircle, LogIn, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext"
@@ -100,7 +99,7 @@ const Navbar = ({ scrollToContact }) => {
           {/* Center: Logo */}
           <div className="flex-shrink-0 md:flex md:flex-1 md:justify-center">
             <div className="text-2xl font-bold transition-colors duration-200">
-              <img src={logo} alt="Logo" className="w-24 md:w-32 h-auto" />
+              <img src={'https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040476/no3zy9ahdiqt5lsai2u6.svg'} alt="Logo" className="w-24 md:w-32 h-auto" />
             </div>
           </div>
 

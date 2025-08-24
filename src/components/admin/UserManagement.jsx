@@ -30,7 +30,7 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all'); // all, active, blocked
+  const [filterStatus, setFilterStatus] = useState('all'); // all, active, blocked.
 
   useEffect(() => {
     fetchUsers();

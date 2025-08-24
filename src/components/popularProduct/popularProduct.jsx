@@ -1,13 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import './popularProduct.css';
-import slide1 from '../../assets/slide1.jpg';
-import slide2 from '../../assets/slide2.png';
-import slide3 from '../../assets/slide3.jpg';
-import slide4 from '../../assets/slide4.jpg';
-import slide5 from '../../assets/slide5.jpg';
-import slide6 from '../../assets/slide6.jpg';
-import slide7 from '../../assets/slide7.jpg';
-import slide8 from '../../assets/slide8.jpg';
+import "./popularProduct.css";
+
 
 const PopularProduct = () => {
   const [cardWidth, setCardWidth] = useState(256);
@@ -21,7 +14,16 @@ const PopularProduct = () => {
   const translateXRef = useRef(0); // store current translateX
   const lastTimeRef = useRef(performance.now());
 
-  const products = [slide1, slide2, slide3, slide4, slide5, slide6, slide7, slide8];
+  const products = [
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040477/xydrk4eg5tkhqufvlr7i.jpg",
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040479/asvxrbly101cyrgugcp3.png",
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040478/hnqodamrjjk7d3iac9sf.jpg",
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040478/of94zrb25vnmllzt5gsq.jpg",
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040478/jl2p7q9oqukfnty8tu1t.jpg",
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040479/v3hsqdivzbswxvmyx0mn.jpg",
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040479/ip3ukehfeks7mkbidxk1.jpg",
+    "https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040479/i3sq2dijdrbon4ym33ce.jpg",
+  ];
 
   const duplicatedProducts = [...products, ...products];
 
@@ -37,11 +39,11 @@ const PopularProduct = () => {
     setIsInitialized(true);
 
     const handleResize = () => setCardWidth(calcWidth());
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("orientationchange", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("orientationchange", handleResize);
     };
   }, []);
 
@@ -56,14 +58,17 @@ const PopularProduct = () => {
         if (Math.abs(delta) > 1) {
           setScrollDirection(delta > 0 ? -1 : 1);
           if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-          scrollTimeoutRef.current = setTimeout(() => setScrollDirection(0), 150);
+          scrollTimeoutRef.current = setTimeout(
+            () => setScrollDirection(0),
+            150
+          );
         }
         lastScrollY.current = window.scrollY;
       }
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
   }, []);
@@ -80,8 +85,13 @@ const PopularProduct = () => {
       let speedPerMs;
 
       // Scroll-based speed
-      if (scrollDirection === 0) speedPerMs = window.innerWidth < 640 ? 0.05 : 0.2;
-      else speedPerMs = window.innerWidth < 640 ? 0.15 * scrollDirection : 0.5 * scrollDirection;
+      if (scrollDirection === 0)
+        speedPerMs = window.innerWidth < 640 ? 0.05 : 0.2;
+      else
+        speedPerMs =
+          window.innerWidth < 640
+            ? 0.15 * scrollDirection
+            : 0.5 * scrollDirection;
 
       translateXRef.current += speedPerMs * deltaTime;
       translateXRef.current = Math.round(translateXRef.current);
@@ -90,8 +100,9 @@ const PopularProduct = () => {
       if (translateXRef.current < -totalWidth) translateXRef.current = 0;
       if (translateXRef.current > 0) translateXRef.current = -totalWidth;
 
-      const container = document.querySelector('.js-carousel');
-      if (container) container.style.transform = `translate3d(${translateXRef.current}px,0,0)`;
+      const container = document.querySelector(".js-carousel");
+      if (container)
+        container.style.transform = `translate3d(${translateXRef.current}px,0,0)`;
 
       animationRef.current = requestAnimationFrame(animate);
     };
@@ -108,7 +119,7 @@ const PopularProduct = () => {
         width: `${cardWidth}px`,
         height: `${cardWidth}px`,
         minWidth: `${cardWidth}px`,
-        backfaceVisibility: 'hidden',
+        backfaceVisibility: "hidden",
       }}
     >
       <img
@@ -139,7 +150,10 @@ const PopularProduct = () => {
         </div>
 
         {/* Carousel */}
-        <div className="flex js-carousel" style={{ gap: 0, height: `${cardWidth}px` }}>
+        <div
+          className="flex js-carousel"
+          style={{ gap: 0, height: `${cardWidth}px` }}
+        >
           {duplicatedProducts.map((src, i) => (
             <ProductCard key={i} src={src} index={i} />
           ))}

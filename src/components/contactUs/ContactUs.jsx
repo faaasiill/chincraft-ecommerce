@@ -1,7 +1,5 @@
-import { useState, useRef, forwardRef } from 'react';
-import { X, MessageCircle, Mail, Send } from 'lucide-react';
-import background from '../../assets/Pink Pattern Background.jpg';
-
+import { useState, useRef, forwardRef } from "react";
+import { X, MessageCircle, Mail, Send } from "lucide-react";
 
 const ContactUs = forwardRef((_, ref) => {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
@@ -15,12 +13,12 @@ const ContactUs = forwardRef((_, ref) => {
   const whatsappMessageRef = useRef(null);
 
   const handleEmailSubmit = () => {
-    const name = emailNameRef.current?.value || '';
-    const subject = emailSubjectRef.current?.value || 'Contact Form Inquiry';
-    const message = emailMessageRef.current?.value || '';
+    const name = emailNameRef.current?.value || "";
+    const subject = emailSubjectRef.current?.value || "Contact Form Inquiry";
+    const message = emailMessageRef.current?.value || "";
 
     if (!name.trim() || !message.trim()) {
-      alert('Please fill in your name and message');
+      alert("Please fill in your name and message");
       return;
     }
 
@@ -35,20 +33,24 @@ ${message}
 Best regards,
 ${name}`;
 
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=chincraft.hm@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=chincraft.hm@gmail.com&su=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(emailBody)}`;
 
-    window.open(gmailUrl, '_blank');
+    window.open(gmailUrl, "_blank");
     setIsEmailModalOpen(false);
   };
 
   const handleWhatsAppSubmit = () => {
-    const name = whatsappNameRef.current?.value || '';
-    const message = whatsappMessageRef.current?.value || '';
+    const name = whatsappNameRef.current?.value || "";
+    const message = whatsappMessageRef.current?.value || "";
 
     const whatsappMessage = `Hello! I'm ${name}.\n\n${message}`;
-    const whatsappLink = `https://wa.me/918848745252?text=${encodeURIComponent(whatsappMessage)}`;
+    const whatsappLink = `https://wa.me/918848745252?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
 
-    window.open(whatsappLink, '_blank');
+    window.open(whatsappLink, "_blank");
     setIsWhatsAppModalOpen(false);
   };
 
@@ -56,7 +58,10 @@ ${name}`;
     if (!isOpen) return null;
 
     return (
-      <div id="contact" className="fixed inset-0 z-50 flex items-center justify-center">
+      <div
+        id="contact"
+        className="fixed inset-0 z-50 flex items-center justify-center"
+      >
         <div
           className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
           onClick={onClose}
@@ -77,13 +82,17 @@ ${name}`;
   return (
     <div
       ref={ref}
-      style={{ backgroundImage: `url(${background})`, backgroundSize: '60%' }}
+      style={{
+        backgroundImage: `url(${"https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040477/uoc1w97ceff6zaquxfdp.jpg"})`,
+        backgroundSize: "60%",
+      }}
       className="w-full from-rose-50 to-orange-50 border-y-1 border-dashed py-16 px-8 mb-8"
     >
       <div className="max-w-2xl mx-auto text-center">
         <h2 className="text-4xl handwrite-font mb-2">Get in Touch</h2>
         <p className="mb-12 text-lg tracking-tight">
-          Have a special gift in mind? We'd love to create something beautiful just for you.
+          Have a special gift in mind? We'd love to create something beautiful
+          just for you.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 justify-center">
@@ -106,12 +115,17 @@ ${name}`;
       </div>
 
       {/* WhatsApp Modal */}
-      <Modal isOpen={isWhatsAppModalOpen} onClose={() => setIsWhatsAppModalOpen(false)}>
+      <Modal
+        isOpen={isWhatsAppModalOpen}
+        onClose={() => setIsWhatsAppModalOpen(false)}
+      >
         <div className="text-center mb-6">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
             <MessageCircle className="text-[#DD6A99]" size={24} />
           </div>
-          <h3 className="text-xl font-semibold text-gray-800">Send WhatsApp Message</h3>
+          <h3 className="text-xl font-semibold text-gray-800">
+            Send WhatsApp Message
+          </h3>
         </div>
 
         <div className="space-y-4">
@@ -138,7 +152,10 @@ ${name}`;
       </Modal>
 
       {/* Email Modal */}
-      <Modal isOpen={isEmailModalOpen} onClose={() => setIsEmailModalOpen(false)}>
+      <Modal
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+      >
         <div className="text-center mb-6">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
             <Mail className="text-[#f7ddb5]" size={24} />

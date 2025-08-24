@@ -1,7 +1,6 @@
 import { useEffect, useRef, useMemo } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import chin from "../../assets/doodle.svg"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -121,7 +120,7 @@ const ScrollReveal = ({
     </div>
     <div className="w-full md:w-1/2 flex justify-center md:justify-center items-end h-full max-w-[500px] p-0 md:p-0">
       <img
-        src={chin}
+        src={'https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040476/tsjnatdypysmc4ogwjkz.svg'}
         alt="Hero image"
         className="max-w-full max-h-[70vh] md:max-h-[50vh] object-contain object-bottom m-0 md:m-0"
       />

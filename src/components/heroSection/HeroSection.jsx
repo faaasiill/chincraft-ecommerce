@@ -1,8 +1,4 @@
 import { useState, useEffect } from "react";
-import img1 from "../../assets/img1.JPG";
-import img4 from "../../assets/img4.JPG";
-import img5 from "../../assets/img5.jpg";
-import fallback from "../../assets/img0.1.jpg"
 import { MoveRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +27,7 @@ const HeroSection = () => {
             }`}
           >
             <img
-              src={img1}
+              src={'https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040476/ntgpdcnpetderpgwwm71.jpg'}
               alt=""
               className="w-32 sm:w-48 lg:w-64 h-auto object-cover transition-transform duration-[6000ms] hover:scale-105"
             />
@@ -51,9 +47,8 @@ const HeroSection = () => {
             } mt-8 sm:mt-12`}
           >
             <img
-              src={img5}
+              src={'https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040476/wwgepaofqexn4epzuwqw.jpg'}
               alt=""
-              onError={(e) => (e.target.src = fallback)}
               className="w-30 sm:w-56 lg:w-62 h-auto object-cover transition-transform duration-[7000ms] hover:scale-105"
             />
             {/* Small rotated text */}
@@ -100,7 +95,7 @@ const HeroSection = () => {
             } mt-6 sm:mt-10`}
           >
             <img
-              src={img4}
+              src={'https://res.cloudinary.com/dgcy8wanx/image/upload/v1756040476/q7dhbavawvssbbnydw2j.jpg'}
               alt=""
               className="w-36 sm:w-52 lg:w-68 h-auto object-cover transition-transform duration-[9000ms] hover:scale-105"
             />

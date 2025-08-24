@@ -6,7 +6,6 @@ import ProductImageGallery from '../components/productDetails/ProductImageGaller
 import ProductInfo from '../components/productDetails/ProductInfo';
 import RecommendedProducts from '../components/productDetails/RecommendedProducts';
 import Footer from '../components/footer/Footer';
-import Navbar from '../components/navbar/Navbar';
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -42,9 +41,7 @@ const ProductDetails = () => {
           return;
         }
 
-        console.log("Fetching product with ID:", productId);
         const productData = await productService.getProducts();
-        console.log("Product data:", productData);
 
         if (!productData || !productData.products || !Array.isArray(productData.products)) {
           console.error("Invalid product data structure:", productData);
@@ -87,7 +84,7 @@ const ProductDetails = () => {
                   p.id !== currentProduct.id &&
                   p.listed
               )
-              .slice(0, 4); // Changed to 4 to match old version
+              .slice(0, 4); 
             setRecommendedProducts(sameCategoryProducts);
           }
         }

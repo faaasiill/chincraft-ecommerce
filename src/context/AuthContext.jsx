@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import {
   logout,
@@ -22,15 +21,12 @@ export const AuthProvider = ({ children }) => {
   // Listen to auth changes and fetch user role from Firestore
 useEffect(() => {
   const unsubscribe = subscribeToAuthChanges(async (authData) => {
-    console.log('Auth data:', authData);
     try {
       setUser(authData.user);
       setError(authData.error || null);
 
       if (authData.user) {
-        console.log('Fetching user data for UID:', authData.user.uid);
         const userData = await userService.getUserById(authData.user.uid);
-        console.log('User data:', userData);
         setRole(userData?.role || 'user');
         if (userData?.blocked) {
           console.log('User blocked, logging out');
@@ -88,13 +84,6 @@ useEffect(() => {
       setLoading(true);
       setError(null);
       const result = await signUpWithEmail(email, password);
-      
-      // If signup successful and we have additional data, we might want to update the user profile
-      if (result && additionalData && Object.keys(additionalData).length > 0) {
-        console.log('Additional signup data:', additionalData);
-        // You might want to save this additional data to Firestore
-      }
-      
       return result;
     } catch (err) {
       console.error('Email signup error:', err);
@@ -110,7 +99,6 @@ useEffect(() => {
       setLoading(true);
       setError(null);
       await logout();
-      // Clear local state
       setUser(null);
       setRole(null);
     } catch (err) {

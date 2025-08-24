@@ -16,6 +16,7 @@ const ProductSection = () => {
   const fetchProducts = async () => {
     try {
       const { products: fetchedProducts } = await productService.getProducts(100); // Fetch 100 items
+      console.log('Raw products:', fetchedProducts);
       const mappedProducts = fetchedProducts
         .filter(p => p.listed) 
         .map(p => ({
@@ -152,7 +153,7 @@ const ProductSection = () => {
         {filteredAndSortedProducts.map(product => (
           <div 
             key={product.id} 
-            className="flex flex-col bg-[#fff] rounded-b-md h-full cursor-pointer group transition-transform duration-200 hover:scale-[1.02]"
+            className="flex flex-col bg-[#fff] rounded-b-md h-full cursor-pointer group transition-transform"
             onClick={() => handleProductClick(product.id)}
           >
             <div className="aspect-[4/5] w-full overflow-hidden">
