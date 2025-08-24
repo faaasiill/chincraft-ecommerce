@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import img1 from "../../assets/img1.JPG";
 import img4 from "../../assets/img4.JPG";
-import img5 from "../../assets/img0.1.jpg";
+import img5 from "../../assets/img5.jpg";
+import fallback from "../../assets/img0.1.jpg"
 import { MoveRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -52,6 +53,7 @@ const HeroSection = () => {
             <img
               src={img5}
               alt=""
+              onError={(e) => (e.target.src = fallback)}
               className="w-30 sm:w-56 lg:w-62 h-auto object-cover transition-transform duration-[7000ms] hover:scale-105"
             />
             {/* Small rotated text */}
