@@ -196,7 +196,7 @@ const ProductDetails = () => {
 Please confirm the order and let me know the pricing and delivery timeline. Thank you!`;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappNumber = "9207928793";
+    const whatsappNumber = "+918848745252";
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
 
     window.open(whatsappUrl, "_blank");
